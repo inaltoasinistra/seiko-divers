@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seiko Diver Automatici</title>
+  <title>Seiko Automatic Divers</title>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -16,106 +16,14 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useEffect } = React;
 
-    // ── SVG ILLUSTRATIONS ─────────────────────────────────────────────────────────
-
-    function DialSVG({ bezel, dial, hand, accent, indices = 12, hasDate = true, label = "SEIKO", sub = "" }) {
-      const cx = 100, cy = 100, rBezel = 88, rDial = 72, rInner = 68;
-      const markers = Array.from({ length: 60 }, (_, i) => {
-        const a = (i * 6 - 90) * Math.PI / 180;
-        const isHour = i % 5 === 0;
-        const r1 = rDial - (isHour ? 12 : 6);
-        const r2 = rDial - 2;
-        return { x1: cx + r1 * Math.cos(a), y1: cy + r1 * Math.sin(a), x2: cx + r2 * Math.cos(a), y2: cy + r2 * Math.sin(a), isHour };
-      });
-      const hAngle = (300 - 90) * Math.PI / 180;
-      const mAngle = (60 - 90) * Math.PI / 180;
-      const sAngle = (180 - 90) * Math.PI / 180;
-      return (
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="200" height="200" fill="#0d0d18" />
-          <circle cx={cx} cy={cy} r={rBezel + 4} fill="none" stroke="#000" strokeWidth="6" opacity="0.5" />
-          <circle cx={cx} cy={cy} r={rBezel} fill={bezel} />
-          {Array.from({ length: 60 }, (_, i) => {
-            const a = (i * 6 - 90) * Math.PI / 180;
-            const r1 = rBezel - (i % 5 === 0 ? 10 : 5);
-            return <line key={i} x1={cx + (rBezel-1)*Math.cos(a)} y1={cy + (rBezel-1)*Math.sin(a)} x2={cx + r1*Math.cos(a)} y2={cy + r1*Math.sin(a)} stroke={accent} strokeWidth={i%5===0?1.5:0.7} opacity="0.8" />;
-          })}
-          <polygon points={`${cx},${cy - rBezel + 6} ${cx-5},${cy - rBezel + 14} ${cx+5},${cy - rBezel + 14}`} fill={accent} />
-          <circle cx={cx} cy={cy} r={rDial} fill={dial} />
-          {markers.filter(m => m.isHour).map((m, i) => (
-            <rect key={i}
-              x={cx + (rDial - 14) * Math.cos((i*30-90)*Math.PI/180) - (i%3===0?4:3)}
-              y={cy + (rDial - 14) * Math.sin((i*30-90)*Math.PI/180) - (i%3===0?8:6)}
-              width={i%3===0?8:6} height={i%3===0?16:12}
-              fill={accent} opacity="0.9"
-              transform={`rotate(${i*30}, ${cx + (rDial-14)*Math.cos((i*30-90)*Math.PI/180)}, ${cy + (rDial-14)*Math.sin((i*30-90)*Math.PI/180)})`}
-            />
-          ))}
-          {hasDate && <rect x="126" y="105" width="18" height="13" rx="2" fill="#1a1a2a" stroke={accent} strokeWidth="0.8" opacity="0.9" />}
-          {hasDate && <text x="135" y="115" textAnchor="middle" fontSize="7" fill="#fff" fontFamily="monospace">28</text>}
-          <text x={cx} y={cy - 22} textAnchor="middle" fontSize="8" fill="#fff" fontFamily="sans-serif" fontWeight="bold" letterSpacing="2">{label}</text>
-          <text x={cx} y={cy - 12} textAnchor="middle" fontSize="5.5" fill={accent} fontFamily="sans-serif" letterSpacing="1.5">{sub}</text>
-          <line x1={cx} y1={cy} x2={cx + 52*Math.cos(mAngle)} y2={cy + 52*Math.sin(mAngle)} stroke={hand} strokeWidth="3.5" strokeLinecap="round" />
-          <line x1={cx} y1={cy} x2={cx + 36*Math.cos(hAngle)} y2={cy + 36*Math.sin(hAngle)} stroke={hand} strokeWidth="5" strokeLinecap="round" />
-          <line x1={cx - 12*Math.cos(sAngle)} y1={cy - 12*Math.sin(sAngle)} x2={cx + 58*Math.cos(sAngle)} y2={cy + 58*Math.sin(sAngle)} stroke={accent} strokeWidth="1.5" strokeLinecap="round" />
-          <circle cx={cx} cy={cy} r="4" fill={accent} />
-          <circle cx={cx} cy={cy} r="2.5" fill={hand} />
-        </svg>
-      );
-    }
-
-    function ProfileSVG({ bezel, dial, accent, caseW = 46, caseH = 52, crownPos = 0.42 }) {
-      const x = 100, y = 100;
-      const hw = caseW / 2, hh = caseH / 2;
-      return (
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="200" height="200" fill="#0d0d18" />
-          <rect x={x - hw + 6} y={y - hh - 22} width={caseW - 12} height={22} rx="3" fill="#2a2a3a" />
-          <line x1={x-hw+10} y1={y-hh-22} x2={x-hw+10} y2={y-hh} stroke="#3a3a4a" strokeWidth="1" />
-          <line x1={x-hw+18} y1={y-hh-22} x2={x-hw+18} y2={y-hh} stroke="#3a3a4a" strokeWidth="1" />
-          <line x1={x+hw-10} y1={y-hh-22} x2={x+hw-10} y2={y-hh} stroke="#3a3a4a" strokeWidth="1" />
-          <line x1={x+hw-18} y1={y-hh-22} x2={x+hw-18} y2={y-hh} stroke="#3a3a4a" strokeWidth="1" />
-          <rect x={x - hw + 6} y={y + hh} width={caseW - 12} height={22} rx="3" fill="#2a2a3a" />
-          <line x1={x-hw+10} y1={y+hh} x2={x-hw+10} y2={y+hh+22} stroke="#3a3a4a" strokeWidth="1" />
-          <line x1={x-hw+18} y1={y+hh} x2={x-hw+18} y2={y+hh+22} stroke="#3a3a4a" strokeWidth="1" />
-          <line x1={x+hw-10} y1={y+hh} x2={x+hw-10} y2={y+hh+22} stroke="#3a3a4a" strokeWidth="1" />
-          <line x1={x+hw-18} y1={y+hh} x2={x+hw-18} y2={y+hh+22} stroke="#3a3a4a" strokeWidth="1" />
-          <rect x={x - hw} y={y - hh} width={caseW} height={caseH} rx="6" fill="#383848" />
-          <rect x={x - hw} y={y - hh} width={caseW} height={10} rx="3" fill={bezel} />
-          <rect x={x - hw} y={y - hh + 10} width={caseW} height={4} fill={bezel} opacity="0.7" />
-          <rect x={x - hw + 3} y={y - hh + 14} width={caseW - 6} height={caseH - 20} rx="2" fill={dial} opacity="0.9" />
-          <rect x={x - hw + 5} y={y - hh + 16} width={(caseW-10)*0.35} height={caseH - 24} rx="2" fill="#fff" opacity="0.05" />
-          <rect x={x - hw} y={y + hh - 10} width={caseW} height={10} rx="3" fill="#2a2a38" />
-          <rect x={x - hw} y={y - hh} width="2" height={caseH} rx="1" fill="#555566" />
-          <rect x={x + hw - 2} y={y - hh} width="2" height={caseH} rx="1" fill="#333344" />
-          <rect x={x + hw} y={y - hh*crownPos*2 + 6} width="8" height="10" rx="3" fill="#444455" stroke="#555566" strokeWidth="0.5" />
-          <line x1={x+hw+2} y1={y-hh*crownPos*2+8} x2={x+hw+6} y2={y-hh*crownPos*2+8} stroke="#666" strokeWidth="1" />
-          <line x1={x+hw+2} y1={y-hh*crownPos*2+11} x2={x+hw+6} y2={y-hh*crownPos*2+11} stroke="#666" strokeWidth="1" />
-          <rect x={x - hw + 2} y={y - hh + 2} width={caseW - 4} height="2" rx="1" fill={accent} opacity="0.6" />
-        </svg>
-      );
-    }
-
-    function ShroudProfileSVG({ bezel, dial, accent }) {
-      const x = 100, y = 100;
-      return (
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="200" height="200" fill="#0d0d18" />
-          <rect x="76" y="22" width="48" height="28" rx="4" fill="#1a1a2a" />
-          <rect x="76" y="150" width="48" height="28" rx="4" fill="#1a1a2a" />
-          <rect x="52" y="50" width="96" height="100" rx="18" fill="#1a1a28" stroke="#2a2a3a" strokeWidth="1.5" />
-          <rect x="62" y="60" width="76" height="80" rx="12" fill="#2a2a38" />
-          <rect x="62" y="60" width="76" height="12" rx="6" fill={bezel} />
-          <rect x="65" y="72" width="70" height="56" rx="4" fill={dial} opacity="0.95" />
-          <rect x="148" y="94" width="10" height="12" rx="3" fill="#333344" stroke="#444455" strokeWidth="0.5" />
-          <line x1="52" y1="80" x2="62" y2="78" stroke="#2a2a3a" strokeWidth="1" />
-          <line x1="52" y1="120" x2="62" y2="122" stroke="#2a2a3a" strokeWidth="1" />
-          <line x1="148" y1="78" x2="148" y2="80" stroke="#2a2a3a" strokeWidth="1" />
-          <rect x="62" y="60" width="76" height="2" rx="1" fill={accent} opacity="0.7" />
-        </svg>
-      );
+    // ── IMAGE CONVENTION ──────────────────────────────────────────────────────────
+    // images/<ref>/front.jpg|png   — front / dial view  (required)
+    // images/<ref>/profile.jpg|png — side profile view  (optional)
+    // <ref> = refs[0].toLowerCase(). jpg is tried first, then png.
+    function imgPath(w, view) {
+      return `images/${w.refs[0].toLowerCase()}/${view}`;   // no extension — WatchImg appends
     }
 
     // ── WATCH DATA ────────────────────────────────────────────────────────────────
@@ -124,90 +32,76 @@
         cat: "1965", name: "1965 Heritage Diver 300m",
         sub: "Cal. 6R55 · 72h · 40mm", refs: ["SPB451", "SPB511"],
         wr: "300m", wrColor: "#4ade80", price: "~€1.200", priceNote: "USA $1.300",
-        svg: { bezel: "#111", dial: "#0a1628", hand: "#e8c84c", accent: "#4ade80", sub: "PROSPEX 300m", caseW: 42, caseH: 50 }
       },
       {
         cat: "1965", name: "1965 Heritage Diver 200m",
         sub: "Cal. 6R35 · 70h · 40.5mm", refs: ["SPB239", "SPB149", "SPB121"],
         wr: "200m", wrColor: "#60a5fa", price: "~€750", priceNote: "USA $725",
-        svg: { bezel: "#0a1628", dial: "#1e3a5f", hand: "#ffffff", accent: "#60a5fa", sub: "PROSPEX 200m", caseW: 42, caseH: 50 }
       },
       {
         cat: "1968", name: "1968 Heritage GMT",
         sub: "Cal. 6R54 · 72h · 42mm · GMT", refs: ["SPB381", "SPB383"],
         wr: "200m", wrColor: "#60a5fa", price: "~€950", priceNote: "USA $995",
-        svg: { bezel: "#0d2a0d", dial: "#0d1f0d", hand: "#ffffff", accent: "#4ade80", sub: "GMT 200m", caseW: 44, caseH: 52 }
+      },
+      {
+        cat: "1968", name: "1968 Heritage GMT Save the Ocean",
+        sub: "Cal. 6R54 · 72h · 42mm · GMT", refs: ["SPB385"],
+        wr: "200m", wrColor: "#60a5fa", price: "—", priceNote: "Limited Ed. · 110° Ann.",
       },
       {
         cat: "1968", name: "1968 Heritage GMT 60° Ann.",
         sub: "Cal. 6R54 · 72h · 42mm · Wave", refs: ["SPB509", "SPB513"],
-        wr: "200m", wrColor: "#60a5fa", price: "~€1.400", priceNote: "Ed. Limitata",
-        svg: { bezel: "#0d0d2a", dial: "#0d1428", hand: "#ffffff", accent: "#a78bfa", sub: "GMT 60th ANN.", caseW: 44, caseH: 52 }
+        wr: "200m", wrColor: "#60a5fa", price: "~€1.400", priceNote: "Limited Ed.",
       },
       {
         cat: "sumo", name: "Sumo",
         sub: "Cal. 6R35 · 70h · 45mm", refs: ["SPB321", "SPB323", "SPB325"],
         wr: "200m", wrColor: "#60a5fa", price: "~€1.250", priceNote: "",
-        svg: { bezel: "#0a1628", dial: "#1a3050", hand: "#ffffff", accent: "#60a5fa", sub: "SUMO 200m", caseW: 48, caseH: 56 }
       },
       {
         cat: "sumo", name: "Sumo Black Series",
         sub: "Cal. 6R35 · 70h · 45mm · PVD", refs: ["SPB433"],
-        wr: "200m", wrColor: "#4ade80", price: "~€1.300", priceNote: "Ed. Limitata",
-        svg: { bezel: "#080808", dial: "#050505", hand: "#4ade80", accent: "#4ade80", sub: "BLACK SERIES", caseW: 48, caseH: 56 }
+        wr: "200m", wrColor: "#4ade80", price: "~€1.300", priceNote: "Limited Ed.",
       },
       {
         cat: "samurai", name: "Samurai (2024)",
         sub: "Cal. 4R35 · 41h · 41.7mm", refs: ["SRPL11", "SRPL13", "SRPL15"],
         wr: "200m", wrColor: "#60a5fa", price: "~€550", priceNote: "",
-        svg: { bezel: "#1a0505", dial: "#2a0808", hand: "#ffffff", accent: "#f87171", sub: "SAMURAI 200m", caseW: 44, caseH: 50 }
       },
       {
         cat: "samurai", name: "Samurai PADI",
         sub: "Cal. 4R35 · 41h · 41.7mm", refs: ["SRPL51", "SRPL53"],
         wr: "200m", wrColor: "#60a5fa", price: "~€650", priceNote: "",
-        svg: { bezel: "#0a1f0a", dial: "#0a1a0a", hand: "#ffffff", accent: "#4ade80", sub: "SAMURAI PADI", caseW: 44, caseH: 50 }
       },
       {
         cat: "marinemaster", name: "Marinemaster 1965 Modern",
         sub: "Cal. 6L37 · 45h · 39.5mm", refs: ["SJE097", "SJE099", "SJE101"],
         wr: "200m", wrColor: "#60a5fa", price: "~€1.500", priceNote: "",
-        svg: { bezel: "#0a1628", dial: "#0c1e38", hand: "#e8e8e8", accent: "#93c5fd", sub: "MARINEMASTER", caseW: 41, caseH: 48 }
       },
       {
         cat: "marinemaster", name: "Marinemaster 1968 300m",
         sub: "Cal. 8L45 Hi-Beat · 72h · 44mm", refs: ["SLA077", "SLA079", "HBF001"],
         wr: "300m", wrColor: "#4ade80", price: "~€2.700", priceNote: "$2.900 SLA079\n$3.600 HBF001",
-        svg: { bezel: "#0a1628", dial: "#080e18", hand: "#ffffff", accent: "#4ade80", sub: "MM 300m HI-BEAT", caseW: 46, caseH: 54 }
       },
       {
         cat: "marinemaster", name: "Marinemaster Professional",
-        sub: "Cal. 8L45 Hi-Beat · 72h · Titanio", refs: ["SLA081"],
+        sub: "Cal. 8L45 Hi-Beat · 72h · Titanium", refs: ["SLA081"],
         wr: "600m", wrColor: "#e879f9", price: "~€4.200", priceNote: "USA $4.600",
-        svg: { bezel: "#12121e", dial: "#05050f", hand: "#e879f9", accent: "#e879f9", sub: "600m PROFESSIONAL", caseW: 48, caseH: 56 }
       },
       {
         cat: "baby-tuna", name: "Baby Tuna",
         sub: "Cal. 4R36 · 41h · 47.8mm Shroud", refs: ["SRPF03", "SRPF05", "SRPF07"],
         wr: "200m", wrColor: "#60a5fa", price: "~€450", priceNote: "",
-        svg: { bezel: "#0a0a0a", dial: "#050505", hand: "#60a5fa", accent: "#60a5fa", sub: "BABY TUNA", shroud: true }
-      },
-      {
-        cat: "baby-tuna", name: "Tuna Spring Drive GMT",
-        sub: "Cal. 5R66 Spring Drive · 72h · Ti", refs: ["SNR055"],
-        wr: "200m", wrColor: "#60a5fa", price: "~€3.500", priceNote: "Prospex LX",
-        svg: { bezel: "#111118", dial: "#0c1218", hand: "#fbbf24", accent: "#fbbf24", sub: "SPRING DRIVE GMT", shroud: true }
       },
       {
         cat: "monster", name: "Monster",
         sub: "Cal. 4R36 · 41h · 44mm", refs: ["SRPD27", "SRPD25"],
         wr: "200m", wrColor: "#60a5fa", price: "~€400", priceNote: "",
-        svg: { bezel: "#080808", dial: "#080808", hand: "#60a5fa", accent: "#60a5fa", sub: "MONSTER 200m", caseW: 46, caseH: 54 }
       },
     ];
 
     const CATS = [
-      { id: "all", label: "Tutti" },
+      { id: "all", label: "All" },
       { id: "1965", label: "1965 Heritage" },
       { id: "1968", label: "1968 Heritage" },
       { id: "sumo", label: "Sumo" },
@@ -217,26 +111,38 @@
       { id: "monster", label: "Monster" },
     ];
 
-    function WatchThumbnail({ w, view, onClick }) {
-      const s = w.svg;
+    // Renders an image with an inline placeholder when the file is missing.
+    // src is a path without extension; tries .jpg then .png before giving up.
+    const EXTS = ["jpg", "png"];
+    function WatchImg({ src, alt, style }) {
+      const [extIdx, setExtIdx] = useState(0);
+      useEffect(() => { setExtIdx(0); }, [src]);
+      if (extIdx >= EXTS.length) return (
+        <div style={{ ...style, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "#111", color: "#333", gap: 4, fontSize: "0.6rem", letterSpacing: "0.05em" }}>
+          <span style={{ fontSize: "1.6rem" }}>⌚</span>
+          <span>N/D</span>
+        </div>
+      );
+      return <img src={`${src}.${EXTS[extIdx]}`} alt={alt} onError={() => setExtIdx(i => i + 1)} style={style} />;
+    }
+
+    function WatchThumbnail({ w, onClick }) {
       return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <div
-            onClick={onClick}
-            style={{ width: 86, height: 86, borderRadius: 8, border: "1px solid #2a2a3a", overflow: "hidden", cursor: "zoom-in", transition: "border-color .2s" }}
-            onMouseOver={e => e.currentTarget.style.borderColor = "#c9a84c"}
-            onMouseOut={e => e.currentTarget.style.borderColor = "#2a2a3a"}
-          >
-            {view === "dial"
-              ? <DialSVG bezel={s.bezel} dial={s.dial} hand={s.hand} accent={s.accent} sub={s.sub} />
-              : s.shroud
-                ? <ShroudProfileSVG bezel={s.bezel} dial={s.dial} accent={s.accent} />
-                : <ProfileSVG bezel={s.bezel} dial={s.dial} accent={s.accent} caseW={s.caseW} caseH={s.caseH} />
-            }
-          </div>
-          <span style={{ fontSize: "0.58rem", color: "#555", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            {view === "dial" ? "Quadrante" : "Profilo"}
-          </span>
+        <div style={{ display: "flex", gap: 8 }}>
+          {["front", "profile"].map(view => (
+            <div key={view}
+              onClick={() => onClick(view)}
+              style={{ width: 350, height: 350, borderRadius: 10, border: "1px solid #2a2a3a", overflow: "hidden", cursor: "zoom-in", background: "#111", flexShrink: 0, transition: "border-color .15s" }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = "#c9a84c"}
+              onMouseLeave={e => e.currentTarget.style.borderColor = "#2a2a3a"}
+            >
+              <WatchImg
+                src={imgPath(w, view)}
+                alt={`${w.name} — ${view}`}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+          ))}
         </div>
       );
     }
@@ -245,17 +151,16 @@
       const [cat, setCat] = useState("all");
       const [modal, setModal] = useState(null);
       const filtered = cat === "all" ? watches : watches.filter(w => w.cat === cat);
-      const s = modal?.watch?.svg;
 
       return (
         <div style={{ background: "#0a0a0f", minHeight: "100vh", padding: "2rem 1rem", fontFamily: "'Segoe UI',system-ui,sans-serif", color: "#e8e8e8" }}>
 
           <div style={{ textAlign: "center", marginBottom: "2rem" }}>
             <h1 style={{ fontSize: "1.8rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#fff" }}>
-              Seiko <span style={{ color: "#c9a84c" }}>Diver</span> Automatici
+              Seiko <span style={{ color: "#c9a84c" }}>Diver</span> Automatics
             </h1>
             <p style={{ color: "#555", fontSize: "0.78rem", marginTop: "0.4rem" }}>
-              Prospex · modelli automatici · escluso Turtle · prezzi retail indicativi
+              Prospex · automatic movements · Turtle excluded · indicative retail prices
             </p>
           </div>
 
@@ -272,10 +177,10 @@
           </div>
 
           <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid #1e1e2a" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 860 }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1100 }}>
               <thead>
                 <tr style={{ background: "#111118", borderBottom: "1px solid #2a2a3a" }}>
-                  {["#", "Modello", "Referenze", "Profilo", "Quadrante", "Specifiche", "Prezzo"].map(h => (
+                  {["#", "Model", "References", "Photo", "Specs", "Price"].map(h => (
                     <th key={h} style={{ padding: "0.85rem 0.9rem", textAlign: "left", fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#c9a84c", fontWeight: 600, whiteSpace: "nowrap" }}>{h}</th>
                   ))}
                 </tr>
@@ -309,10 +214,7 @@
                       ))}
                     </td>
                     <td style={{ padding: "0.85rem 0.9rem" }}>
-                      <WatchThumbnail w={w} view="profile" onClick={() => setModal({ watch: w, view: "profile" })} />
-                    </td>
-                    <td style={{ padding: "0.85rem 0.9rem" }}>
-                      <WatchThumbnail w={w} view="dial" onClick={() => setModal({ watch: w, view: "dial" })} />
+                      <WatchThumbnail w={w} onClick={view => setModal({ w, view })} />
                     </td>
                     <td style={{ padding: "0.85rem 0.9rem", fontSize: "0.7rem", color: "#888", lineHeight: 1.9, minWidth: 135 }}>
                       {w.sub.split("·").map((s, si) => (
@@ -332,25 +234,19 @@
           </div>
 
           <p style={{ textAlign: "center", color: "#333", fontSize: "0.7rem", marginTop: "1rem" }}>
-            {filtered.length} modelli · prezzi indicativi retail EU · illustrazioni schematiche · clicca per ingrandire
+            {filtered.length} models · indicative EU retail prices · click to enlarge
           </p>
 
-          {modal && s && (
+          {modal && (
             <div onClick={() => setModal(null)}
-              style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.96)", zIndex: 9999, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem" }}>
+              style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.97)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "3rem" }}>
               <button onClick={() => setModal(null)}
-                style={{ position: "fixed", top: "1rem", right: "1rem", background: "#c9a84c", color: "#000", border: "none", width: 36, height: 36, borderRadius: "50%", fontSize: "1.1rem", cursor: "pointer", fontWeight: 700 }}>✕</button>
-              <div style={{ color: "#888", fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                {modal.watch.name} — {modal.view === "dial" ? "quadrante" : "profilo"}
-              </div>
-              <div style={{ width: 340, height: 340 }}>
-                {modal.view === "dial"
-                  ? <DialSVG bezel={s.bezel} dial={s.dial} hand={s.hand} accent={s.accent} sub={s.sub} />
-                  : s.shroud
-                    ? <ShroudProfileSVG bezel={s.bezel} dial={s.dial} accent={s.accent} />
-                    : <ProfileSVG bezel={s.bezel} dial={s.dial} accent={s.accent} caseW={s.caseW} caseH={s.caseH} />
-                }
-              </div>
+                style={{ position: "fixed", top: "1rem", right: "1rem", background: "#c9a84c", color: "#000", border: "none", width: 36, height: 36, borderRadius: "50%", fontSize: "1.1rem", cursor: "pointer", fontWeight: 700, zIndex: 1 }}>✕</button>
+              <WatchImg
+                src={imgPath(modal.w, modal.view)}
+                alt={`${modal.w.name} — ${modal.view}`}
+                style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", borderRadius: 8 }}
+              />
             </div>
           )}
         </div>
