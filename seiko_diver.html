@@ -21,9 +21,10 @@
     // ── IMAGE CONVENTION ──────────────────────────────────────────────────────────
     // images/<ref>/front.jpg|png   — front / dial view  (required)
     // images/<ref>/profile.jpg|png — side profile view  (optional)
-    // <ref> = refs[0].toLowerCase(). jpg is tried first, then png.
-    function imgPath(w, view) {
-      return `images/${w.refs[0].toLowerCase()}/${view}`;   // no extension — WatchImg appends
+    // <ref> = reference number lowercased, e.g. images/spb381/front.jpg
+    // jpg is tried first, then png.
+    function imgPath(wref, view) {
+      return `images/${wref}/${view}`;   // no extension — WatchImg appends
     }
 
     // ── WATCH DATA ────────────────────────────────────────────────────────────────
@@ -126,7 +127,7 @@
       return <img src={`${src}.${EXTS[extIdx]}`} alt={alt} onError={() => setExtIdx(i => i + 1)} style={style} />;
     }
 
-    function WatchThumbnail({ w, onClick }) {
+    function WatchThumbnail({ wref, name, onClick }) {
       return (
         <div style={{ display: "flex", gap: 8 }}>
           {["front", "profile"].map(view => (
@@ -137,8 +138,8 @@
               onMouseLeave={e => e.currentTarget.style.borderColor = "#2a2a3a"}
             >
               <WatchImg
-                src={imgPath(w, view)}
-                alt={`${w.name} — ${view}`}
+                src={imgPath(wref, view)}
+                alt={`${name} — ${view}`}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
@@ -151,6 +152,8 @@
       const [cat, setCat] = useState("all");
       const [modal, setModal] = useState(null);
       const filtered = cat === "all" ? watches : watches.filter(w => w.cat === cat);
+      // one row per reference number
+      const rows = filtered.flatMap(w => w.refs.map(r => ({ ...w, wref: r.toLowerCase() })));
 
       return (
         <div style={{ background: "#0a0a0f", minHeight: "100vh", padding: "2rem 1rem", fontFamily: "'Segoe UI',system-ui,sans-serif", color: "#e8e8e8" }}>
@@ -186,8 +189,8 @@
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((w, i) => (
-                  <tr key={w.name} style={{ borderBottom: "1px solid #14141e" }}
+                {rows.map((w, i) => (
+                  <tr key={w.wref} style={{ borderBottom: "1px solid #14141e" }}
                     onMouseOver={e => e.currentTarget.style.background = "#0d0d16"}
                     onMouseOut={e => e.currentTarget.style.background = "transparent"}
                   >
@@ -204,17 +207,15 @@
                       }}>{w.wr}</span>
                     </td>
                     <td style={{ padding: "0.85rem 0.9rem", minWidth: 115 }}>
-                      {w.refs.map(r => (
-                        <span key={r} style={{
-                          display: "inline-block", margin: "2px 2px 2px 0",
-                          fontFamily: "monospace", fontSize: "0.7rem", color: "#c9a84c",
-                          background: "#1a160a", padding: "0.1rem 0.4rem",
-                          borderRadius: 4, border: "1px solid #33280e", whiteSpace: "nowrap"
-                        }}>{r}</span>
-                      ))}
+                      <span style={{
+                        display: "inline-block",
+                        fontFamily: "monospace", fontSize: "0.7rem", color: "#c9a84c",
+                        background: "#1a160a", padding: "0.1rem 0.4rem",
+                        borderRadius: 4, border: "1px solid #33280e", whiteSpace: "nowrap"
+                      }}>{w.wref.toUpperCase()}</span>
                     </td>
                     <td style={{ padding: "0.85rem 0.9rem" }}>
-                      <WatchThumbnail w={w} onClick={view => setModal({ w, view })} />
+                      <WatchThumbnail wref={w.wref} name={w.name} onClick={view => setModal({ wref: w.wref, name: w.name, view })} />
                     </td>
                     <td style={{ padding: "0.85rem 0.9rem", fontSize: "0.7rem", color: "#888", lineHeight: 1.9, minWidth: 135 }}>
                       {w.sub.split("·").map((s, si) => (
@@ -234,7 +235,7 @@
           </div>
 
           <p style={{ textAlign: "center", color: "#333", fontSize: "0.7rem", marginTop: "1rem" }}>
-            {filtered.length} models · indicative EU retail prices · click to enlarge
+            {rows.length} references · indicative EU retail prices · click to enlarge
           </p>
 
           {modal && (
@@ -243,8 +244,8 @@
               <button onClick={() => setModal(null)}
                 style={{ position: "fixed", top: "1rem", right: "1rem", background: "#c9a84c", color: "#000", border: "none", width: 36, height: 36, borderRadius: "50%", fontSize: "1.1rem", cursor: "pointer", fontWeight: 700, zIndex: 1 }}>✕</button>
               <WatchImg
-                src={imgPath(modal.w, modal.view)}
-                alt={`${modal.w.name} — ${modal.view}`}
+                src={imgPath(modal.wref, modal.view)}
+                alt={`${modal.name} — ${modal.view}`}
                 style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", borderRadius: 8 }}
               />
             </div>
