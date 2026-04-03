@@ -150,8 +150,10 @@
 
     function App() {
       const [cat, setCat] = useState("all");
+      const [gmtOnly, setGmtOnly] = useState(false);
       const [modal, setModal] = useState(null);
-      const filtered = cat === "all" ? watches : watches.filter(w => w.cat === cat);
+      const filtered = (cat === "all" ? watches : watches.filter(w => w.cat === cat))
+        .filter(w => !gmtOnly || w.sub.includes("GMT"));
       // one row per reference number
       const rows = filtered.flatMap(w => w.refs.map(r => ({ ...w, wref: r.toLowerCase() })));
 
@@ -167,7 +169,7 @@
             </p>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", justifyContent: "center", marginBottom: "1.8rem" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", justifyContent: "center", marginBottom: "0.8rem" }}>
             {CATS.map(c => (
               <button key={c.id} onClick={() => setCat(c.id)} style={{
                 background: cat === c.id ? "#c9a84c" : "#1a1a25",
@@ -177,6 +179,15 @@
                 padding: "0.35rem 0.9rem", borderRadius: 20, cursor: "pointer", fontSize: "0.8rem"
               }}>{c.label}</button>
             ))}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.8rem" }}>
+            <button onClick={() => setGmtOnly(v => !v)} style={{
+              background: gmtOnly ? "#6366f1" : "#1a1a25",
+              border: `1px solid ${gmtOnly ? "#6366f1" : "#333"}`,
+              color: gmtOnly ? "#fff" : "#aaa",
+              fontWeight: gmtOnly ? 700 : 400,
+              padding: "0.35rem 0.9rem", borderRadius: 20, cursor: "pointer", fontSize: "0.8rem"
+            }}>GMT only</button>
           </div>
 
           <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid #1e1e2a" }}>

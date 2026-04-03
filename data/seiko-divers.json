@@ -1,0 +1,171 @@
+{
+  "id": "seiko-divers",
+  "name": "Seiko Diver Automatics",
+  "subtitle": "Prospex · automatic movements · Turtle excluded · indicative retail prices",
+  "categories": [
+    { "id": "all",          "label": "All" },
+    { "id": "1965",         "label": "1965 Heritage" },
+    { "id": "1968",         "label": "1968 Heritage" },
+    { "id": "sumo",         "label": "Sumo" },
+    { "id": "samurai",      "label": "Samurai" },
+    { "id": "marinemaster", "label": "Marinemaster" },
+    { "id": "baby-tuna",    "label": "Baby Tuna" },
+    { "id": "monster",      "label": "Monster" }
+  ],
+  "watches": [
+    {
+      "cat": "1965",
+      "name": "1965 Heritage Diver 300m",
+      "sub": "Cal. 6R55 · 72h · 40mm",
+      "refs": ["SPB451", "SPB511"],
+      "water_resistance": 300,
+      "diameter": 40,
+      "gmt": false,
+      "price": "~€1.200",
+      "priceNote": "USA $1.300"
+    },
+    {
+      "cat": "1965",
+      "name": "1965 Heritage Diver 200m",
+      "sub": "Cal. 6R35 · 70h · 40.5mm",
+      "refs": ["SPB239", "SPB149", "SPB121"],
+      "water_resistance": 200,
+      "diameter": 40.5,
+      "gmt": false,
+      "price": "~€750",
+      "priceNote": "USA $725"
+    },
+    {
+      "cat": "1968",
+      "name": "1968 Heritage GMT",
+      "sub": "Cal. 6R54 · 72h · 42mm · GMT",
+      "refs": ["SPB381", "SPB383"],
+      "water_resistance": 200,
+      "diameter": 42,
+      "gmt": true,
+      "price": "~€950",
+      "priceNote": "USA $995"
+    },
+    {
+      "cat": "1968",
+      "name": "1968 Heritage GMT Save the Ocean",
+      "sub": "Cal. 6R54 · 72h · 42mm · GMT",
+      "refs": ["SPB385"],
+      "water_resistance": 200,
+      "diameter": 42,
+      "gmt": true,
+      "price": "—",
+      "priceNote": "Limited Ed. · 110° Ann."
+    },
+    {
+      "cat": "1968",
+      "name": "1968 Heritage GMT 60° Ann.",
+      "sub": "Cal. 6R54 · 72h · 42mm · Wave",
+      "refs": ["SPB509", "SPB513"],
+      "water_resistance": 200,
+      "diameter": 42,
+      "gmt": true,
+      "price": "~€1.400",
+      "priceNote": "Limited Ed."
+    },
+    {
+      "cat": "sumo",
+      "name": "Sumo",
+      "sub": "Cal. 6R35 · 70h · 45mm",
+      "refs": ["SPB321", "SPB323", "SPB325"],
+      "water_resistance": 200,
+      "diameter": 45,
+      "gmt": false,
+      "price": "~€1.250",
+      "priceNote": ""
+    },
+    {
+      "cat": "sumo",
+      "name": "Sumo Black Series",
+      "sub": "Cal. 6R35 · 70h · 45mm · PVD",
+      "refs": ["SPB433"],
+      "water_resistance": 200,
+      "diameter": 45,
+      "gmt": false,
+      "price": "~€1.300",
+      "priceNote": "Limited Ed."
+    },
+    {
+      "cat": "samurai",
+      "name": "Samurai (2024)",
+      "sub": "Cal. 4R35 · 41h · 41.7mm",
+      "refs": ["SRPL11", "SRPL13", "SRPL15"],
+      "water_resistance": 200,
+      "diameter": 41.7,
+      "gmt": false,
+      "price": "~€550",
+      "priceNote": ""
+    },
+    {
+      "cat": "samurai",
+      "name": "Samurai PADI",
+      "sub": "Cal. 4R35 · 41h · 41.7mm",
+      "refs": ["SRPL51", "SRPL53"],
+      "water_resistance": 200,
+      "diameter": 41.7,
+      "gmt": false,
+      "price": "~€650",
+      "priceNote": ""
+    },
+    {
+      "cat": "marinemaster",
+      "name": "Marinemaster 1965 Modern",
+      "sub": "Cal. 6L37 · 45h · 39.5mm",
+      "refs": ["SJE097", "SJE099", "SJE101"],
+      "water_resistance": 200,
+      "diameter": 39.5,
+      "gmt": false,
+      "price": "~€1.500",
+      "priceNote": ""
+    },
+    {
+      "cat": "marinemaster",
+      "name": "Marinemaster 1968 300m",
+      "sub": "Cal. 8L45 Hi-Beat · 72h · 44mm",
+      "refs": ["SLA077", "SLA079", "HBF001"],
+      "water_resistance": 300,
+      "diameter": 44,
+      "gmt": false,
+      "price": "~€2.700",
+      "priceNote": "$2.900 SLA079\n$3.600 HBF001"
+    },
+    {
+      "cat": "marinemaster",
+      "name": "Marinemaster Professional",
+      "sub": "Cal. 8L45 Hi-Beat · 72h · Titanium",
+      "refs": ["SLA081"],
+      "water_resistance": 600,
+      "diameter": 47,
+      "gmt": false,
+      "price": "~€4.200",
+      "priceNote": "USA $4.600"
+    },
+    {
+      "cat": "baby-tuna",
+      "name": "Baby Tuna",
+      "sub": "Cal. 4R36 · 41h · 47.8mm Shroud",
+      "refs": ["SRPF03", "SRPF07"],
+      "water_resistance": 200,
+      "diameter": 47.8,
+      "gmt": false,
+      "price": "~€450",
+      "priceNote": ""
+    },
+    {
+      "cat": "monster",
+      "name": "Monster",
+      "sub": "Cal. 4R36 · 41h · 44mm",
+      "refs": ["SRPD27", "SRPD25"],
+      "water_resistance": 200,
+      "diameter": 44,
+      "gmt": false,
+      "price": "~€400",
+      "priceNote": ""
+    }
+  ]
+}
