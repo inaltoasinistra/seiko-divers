@@ -43,8 +43,8 @@
       "water_resistance": 200,
       "diameter": 42,
       "gmt": true,
-      "price": "~€950",
-      "priceNote": "USA $995"
+      "price": "~€1700",
+      "priceNote": ""
     },
     {
       "cat": "1968",
@@ -54,19 +54,30 @@
       "water_resistance": 200,
       "diameter": 42,
       "gmt": true,
-      "price": "—",
+      "price": "€1.900",
       "priceNote": "Limited Ed. · 110° Ann."
     },
     {
       "cat": "1968",
       "name": "1968 Heritage GMT 60° Ann.",
       "sub": "Cal. 6R54 · 72h · 42mm · Wave",
-      "refs": ["SPB509", "SPB513"],
-      "water_resistance": 200,
+      "refs": ["SPB509"],
+      "water_resistance": 300,
       "diameter": 42,
       "gmt": true,
       "price": "~€1.400",
       "priceNote": "Limited Ed."
+    },
+    {
+      "cat": "1968",
+      "name": "Prospex Speedtimer",
+      "sub": "Cal. 6R55 · 72h · 39.5mm · Countdown bezel",
+      "refs": ["SPB513"],
+      "water_resistance": 200,
+      "diameter": 39.5,
+      "gmt": false,
+      "price": "~€850",
+      "priceNote": ""
     },
     {
       "cat": "sumo",
@@ -137,7 +148,7 @@
     {
       "cat": "marinemaster",
       "name": "Marinemaster Professional",
-      "sub": "Cal. 8L45 Hi-Beat · 72h · Titanium",
+      "sub": "Cal. 8L45 Hi-Beat · 72h · 47mm · Titanium",
       "refs": ["SLA081"],
       "water_resistance": 600,
       "diameter": 47,
@@ -148,10 +159,10 @@
     {
       "cat": "baby-tuna",
       "name": "Baby Tuna",
-      "sub": "Cal. 4R36 · 41h · 47.8mm Shroud",
+      "sub": "Cal. 4R36 · 41h · 43.8mm Shroud",
       "refs": ["SRPF03", "SRPF07"],
       "water_resistance": 200,
-      "diameter": 47.8,
+      "diameter": 43.8,
       "gmt": false,
       "price": "~€450",
       "priceNote": ""

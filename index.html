@@ -16,7 +16,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useCallback } = React;
 
     // ── IMAGE CONVENTION ──────────────────────────────────────────────────────────
     // images/<ref>/front.jpg|png|webp   — front / dial view  (required)
@@ -92,9 +92,8 @@
       { id: "gt44",  label: "> 44mm" },
     ];
 
-    function applyFilters(watches, cat, filters) {
+    function applyFilters(watches, filters) {
       return watches
-        .filter(w => cat === "all" || w.cat === cat)
         .filter(w => !filters.gmt || w.gmt)
         .filter(w => filters.wr === "all" || w.water_resistance >= parseInt(filters.wr))
         .filter(w => {
@@ -107,17 +106,29 @@
         });
     }
 
+    // ── STARRED PERSISTENCE ───────────────────────────────────────────────────────
+    // Starred refs are saved to user/starred.json via POST /api/starred.
+    // The file is gitignored (user-local data).
+
+    function saveStarred(starred) {
+      fetch("/api/starred", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify([...starred]),
+      }).catch(() => {});   // silently ignore if server has no write endpoint
+    }
+
     // ── APP ───────────────────────────────────────────────────────────────────────
 
     function App() {
-      const [collections, setCollections] = useState([]);   // all loaded collection objects
-      const [collectionId, setCollectionId] = useState(null);
-      const [cat, setCat] = useState("all");
-      const [filters, setFilters] = useState({ gmt: false, wr: "all", diameter: "all" });
+      const [collections, setCollections] = useState([]);
+      const [collectionId, setCollectionId] = useState(() => location.hash.slice(1) || null);
+      const [filters, setFilters] = useState({ gmt: false, wr: "all", diameter: "all", starred: false });
+      const [starred, setStarred] = useState(new Set());
       const [modal, setModal] = useState(null);
       const [error, setError] = useState(null);
 
-      // Load the file list, then fetch every collection file in parallel
+      // Load collections manifest + all collection files in parallel
       useEffect(() => {
         fetch("data/collections.json")
           .then(r => r.json())
@@ -126,17 +137,32 @@
           ))
           .then(loaded => {
             setCollections(loaded);
-            if (loaded.length > 0) setCollectionId(loaded[0].id);
+            setCollectionId(id => {
+              const valid = loaded.find(c => c.id === id);
+              return valid ? id : (loaded[0]?.id ?? null);
+            });
           })
           .catch(err => setError(err.message || "Could not load collections"));
       }, []);
 
-      const collection = collections.find(c => c.id === collectionId) ?? null;
+      // Load starred refs from user/starred.json (missing file = empty set, not an error)
+      useEffect(() => {
+        fetch("user/starred.json")
+          .then(r => r.ok ? r.json() : [])
+          .then(refs => setStarred(new Set(refs)))
+          .catch(() => {});
+      }, []);
 
-      const handleCollectionChange = id => {
-        setCollectionId(id);
-        setCat("all");
-      };
+      const toggleStar = useCallback((wref) => {
+        setStarred(prev => {
+          const next = new Set(prev);
+          next.has(wref) ? next.delete(wref) : next.add(wref);
+          saveStarred(next);
+          return next;
+        });
+      }, []);
+
+      const collection = collections.find(c => c.id === collectionId) ?? null;
 
       if (error) return (
         <div style={{ background: "#0a0a0f", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#e55", fontFamily: "monospace", fontSize: "0.9rem" }}>
@@ -150,8 +176,10 @@
         </div>
       );
 
-      const filtered = applyFilters(collection.watches, cat, filters);
-      const rows = filtered.flatMap(w => w.refs.map(r => ({ ...w, wref: r.toLowerCase() })));
+      const filtered = applyFilters(collection.watches, filters);
+      const rows = filtered
+        .flatMap(w => w.refs.map(r => ({ ...w, wref: r.toLowerCase() })))
+        .filter(r => !filters.starred || starred.has(r.wref));
 
       return (
         <div style={{ background: "#0a0a0f", minHeight: "100vh", padding: "2rem 1rem", fontFamily: "'Segoe UI',system-ui,sans-serif", color: "#e8e8e8" }}>
@@ -160,7 +188,7 @@
           {collections.length > 1 && (
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", justifyContent: "center", marginBottom: "1.5rem" }}>
               {collections.map(c => (
-                <Pill key={c.id} active={collectionId === c.id} onClick={() => handleCollectionChange(c.id)}>{c.name}</Pill>
+                <Pill key={c.id} active={collectionId === c.id} onClick={() => { location.hash = c.id; setCollectionId(c.id); }}>{c.name}</Pill>
               ))}
             </div>
           )}
@@ -175,15 +203,9 @@
             )}
           </div>
 
-          {/* Category filter */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", justifyContent: "center", marginBottom: "0.8rem" }}>
-            {collection.categories.map(c => (
-              <Pill key={c.id} active={cat === c.id} onClick={() => setCat(c.id)}>{c.label}</Pill>
-            ))}
-          </div>
-
-          {/* Global filters */}
+          {/* Filters */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "1.2rem", justifyContent: "center", alignItems: "center", marginBottom: "1.8rem" }}>
+            <Pill active={filters.starred} onClick={() => setFilters(f => ({ ...f, starred: !f.starred }))} activeColor="#f59e0b" activeTextColor="#000">★ Starred</Pill>
             <Pill active={filters.gmt} onClick={() => setFilters(f => ({ ...f, gmt: !f.gmt }))} activeColor="#6366f1" activeTextColor="#fff">GMT</Pill>
             <div style={{ display: "flex", gap: "0.4rem" }}>
               {WR_OPTIONS.map(o => (
@@ -202,7 +224,7 @@
             <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1100 }}>
               <thead>
                 <tr style={{ background: "#111118", borderBottom: "1px solid #2a2a3a" }}>
-                  {["#", "Model", "Reference", "Photo", "Specs", "Price"].map(h => (
+                  {["", "#", "Model", "Reference", "Photo", "Specs", "Price"].map(h => (
                     <th key={h} style={{ padding: "0.85rem 0.9rem", textAlign: "left", fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#c9a84c", fontWeight: 600, whiteSpace: "nowrap" }}>{h}</th>
                   ))}
                 </tr>
@@ -210,11 +232,17 @@
               <tbody>
                 {rows.map((w, i) => {
                   const color = wrColor(w.water_resistance);
+                  const isStarred = starred.has(w.wref);
                   return (
                     <tr key={w.wref} style={{ borderBottom: "1px solid #14141e" }}
                       onMouseOver={e => e.currentTarget.style.background = "#0d0d16"}
                       onMouseOut={e => e.currentTarget.style.background = "transparent"}
                     >
+                      <td style={{ padding: "0.85rem 0.5rem 0.85rem 0.9rem", width: 32 }}>
+                        <button onClick={() => toggleStar(w.wref)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "1rem", lineHeight: 1, color: isStarred ? "#f59e0b" : "#333", transition: "color .15s" }}>
+                          {isStarred ? "★" : "☆"}
+                        </button>
+                      </td>
                       <td style={{ padding: "0.85rem 0.9rem", color: "#333", fontSize: "0.72rem", fontFamily: "monospace" }}>
                         {String(i + 1).padStart(2, "0")}
                       </td>
