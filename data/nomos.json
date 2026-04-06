@@ -1,0 +1,251 @@
+{
+  "id": "nomos",
+  "name": "NOMOS Glashütte",
+  "subtitle": "German manufacture · in-house DUW movements · automatic only",
+  "categories": [
+    { "id": "all",       "label": "All" },
+    { "id": "tangente",  "label": "Tangente" },
+    { "id": "metro",     "label": "Metro" },
+    { "id": "club",      "label": "Club Sport" },
+    { "id": "ahoi",      "label": "Ahoi" },
+    { "id": "orion",     "label": "Orion" },
+    { "id": "ludwig",    "label": "Ludwig" },
+    { "id": "tangomat",  "label": "Tangomat" },
+    { "id": "minimatik", "label": "Minimatik" },
+    { "id": "autobahn",  "label": "Autobahn" },
+    { "id": "zurich",    "label": "Zürich" }
+  ],
+  "watches": [
+    {
+      "cat": "tangente",
+      "name": "Tangente neomatik 35",
+      "sub": "DUW 3001 · 43h · 35mm",
+      "refs": ["tangente-35"],
+      "water_resistance": 5,
+      "diameter": 35,
+      "gmt": false,
+      "price": "€3,120",
+      "priceNote": ""
+    },
+    {
+      "cat": "tangente",
+      "name": "Tangente neomatik 39",
+      "sub": "DUW 3001 · 43h · 39mm",
+      "refs": ["tangente-39"],
+      "water_resistance": 5,
+      "diameter": 39,
+      "gmt": false,
+      "price": "€2,960",
+      "priceNote": ""
+    },
+    {
+      "cat": "tangente",
+      "name": "Tangente Sport neomatik 42 Date",
+      "sub": "DUW 6101 · 42h · 42mm · Date",
+      "refs": ["tangente-sport-42"],
+      "water_resistance": 10,
+      "diameter": 42,
+      "gmt": false,
+      "price": "€3,620",
+      "priceNote": ""
+    },
+    {
+      "cat": "metro",
+      "name": "Metro neomatik 39",
+      "sub": "DUW 3001 · 43h · 39mm",
+      "refs": ["metro-39"],
+      "water_resistance": 5,
+      "diameter": 39,
+      "gmt": false,
+      "price": "€3,620",
+      "priceNote": ""
+    },
+    {
+      "cat": "metro",
+      "name": "Metro neomatik 41 Update",
+      "sub": "DUW 3001 · 43h · 41mm",
+      "refs": ["metro-41"],
+      "water_resistance": 5,
+      "diameter": 41,
+      "gmt": false,
+      "price": "€3,880",
+      "priceNote": ""
+    },
+    {
+      "cat": "club",
+      "name": "Club Sport neomatik 34",
+      "sub": "DUW 3001 · 43h · 34mm",
+      "refs": ["club-34"],
+      "water_resistance": 200,
+      "diameter": 34,
+      "gmt": false,
+      "price": "€2,900",
+      "priceNote": ""
+    },
+    {
+      "cat": "club",
+      "name": "Club Sport neomatik 37",
+      "sub": "DUW 3001 · 43h · 37mm",
+      "refs": ["club-37"],
+      "water_resistance": 200,
+      "diameter": 37,
+      "gmt": false,
+      "price": "€2,900",
+      "priceNote": ""
+    },
+    {
+      "cat": "club",
+      "name": "Club Sport neomatik 39.5",
+      "sub": "DUW 3001 · 43h · 39.5mm",
+      "refs": ["club-395"],
+      "water_resistance": 200,
+      "diameter": 39.5,
+      "gmt": false,
+      "price": "€2,940",
+      "priceNote": ""
+    },
+    {
+      "cat": "club",
+      "name": "Club Sport neomatik 42 Date",
+      "sub": "DUW 6101 · 42h · 42mm · Date",
+      "refs": ["club-42-date"],
+      "water_resistance": 300,
+      "diameter": 42,
+      "gmt": false,
+      "price": "€3,880",
+      "priceNote": ""
+    },
+    {
+      "cat": "club",
+      "name": "Club Sport neomatik Worldtimer",
+      "sub": "DUW 3202 · 42h · 40mm · World Timer",
+      "refs": ["club-worldtimer"],
+      "water_resistance": 100,
+      "diameter": 40,
+      "gmt": true,
+      "price": "€4,400",
+      "priceNote": ""
+    },
+    {
+      "cat": "ahoi",
+      "name": "Ahoi neomatik 36",
+      "sub": "DUW 3001 · 43h · 36mm",
+      "refs": ["ahoi-36"],
+      "water_resistance": 200,
+      "diameter": 36,
+      "gmt": false,
+      "price": "€3,540",
+      "priceNote": ""
+    },
+    {
+      "cat": "ahoi",
+      "name": "Ahoi neomatik 38 Date",
+      "sub": "DUW 6101 · 42h · 38mm · Date",
+      "refs": ["ahoi-38-date"],
+      "water_resistance": 200,
+      "diameter": 38,
+      "gmt": false,
+      "price": "€3,720",
+      "priceNote": ""
+    },
+    {
+      "cat": "orion",
+      "name": "Orion neomatik 36.4",
+      "sub": "DUW 3001 · 43h · 36.4mm",
+      "refs": ["orion-364"],
+      "water_resistance": 5,
+      "diameter": 36.4,
+      "gmt": false,
+      "price": "€3,000",
+      "priceNote": ""
+    },
+    {
+      "cat": "ludwig",
+      "name": "Ludwig neomatik 36",
+      "sub": "DUW 3001 · 43h · 36mm",
+      "refs": ["ludwig-36"],
+      "water_resistance": 5,
+      "diameter": 36,
+      "gmt": false,
+      "price": "€2,900",
+      "priceNote": ""
+    },
+    {
+      "cat": "ludwig",
+      "name": "Ludwig neomatik 39",
+      "sub": "DUW 3001 · 43h · 39mm",
+      "refs": ["ludwig-39"],
+      "water_resistance": 5,
+      "diameter": 39,
+      "gmt": false,
+      "price": "€3,200",
+      "priceNote": ""
+    },
+    {
+      "cat": "tangomat",
+      "name": "Tangomat",
+      "sub": "DUW 5001 · 43h · 38.3mm",
+      "refs": ["tangomat"],
+      "water_resistance": 3,
+      "diameter": 38.3,
+      "gmt": false,
+      "price": "€3,480",
+      "priceNote": ""
+    },
+    {
+      "cat": "tangomat",
+      "name": "Tangomat Date",
+      "sub": "DUW 5101 · 42h · 38.3mm · Date",
+      "refs": ["tangomat-date"],
+      "water_resistance": 3,
+      "diameter": 38.3,
+      "gmt": false,
+      "price": "€3,260",
+      "priceNote": ""
+    },
+    {
+      "cat": "tangomat",
+      "name": "Tangomat GMT",
+      "sub": "DUW 5201 · 42h · 38.3mm · GMT",
+      "refs": ["tangomat-gmt"],
+      "water_resistance": 3,
+      "diameter": 38.3,
+      "gmt": true,
+      "price": "€4,900",
+      "priceNote": ""
+    },
+    {
+      "cat": "minimatik",
+      "name": "Minimatik 35.5",
+      "sub": "DUW 3001 · 43h · 35.5mm",
+      "refs": ["minimatik"],
+      "water_resistance": 3,
+      "diameter": 35.5,
+      "gmt": false,
+      "price": "€3,380",
+      "priceNote": ""
+    },
+    {
+      "cat": "autobahn",
+      "name": "Autobahn neomatik 41 Date",
+      "sub": "DUW 6101 · 42h · 41mm · Date",
+      "refs": ["autobahn-41"],
+      "water_resistance": 10,
+      "diameter": 41,
+      "gmt": false,
+      "price": "€3,720",
+      "priceNote": ""
+    },
+    {
+      "cat": "zurich",
+      "name": "Zürich Worldtimer",
+      "sub": "DUW 3202 · 42h · 40mm · World Timer",
+      "refs": ["zurich-worldtimer"],
+      "water_resistance": 10,
+      "diameter": 40,
+      "gmt": true,
+      "price": "€4,820",
+      "priceNote": ""
+    }
+  ]
+}

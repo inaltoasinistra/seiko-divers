@@ -107,15 +107,55 @@
     }
 
     // ── STARRED PERSISTENCE ───────────────────────────────────────────────────────
-    // Starred refs are saved to user/starred.json via POST /api/starred.
-    // The file is gitignored (user-local data).
+    // Starred refs are stored in localStorage under the key "watches-collections-starred".
+
+    const STORAGE_KEY = "watches-collections-starred";
+
+    function loadStarredFromStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? new Set(JSON.parse(raw)) : new Set();
+      } catch(e) {
+        return new Set();
+      }
+    }
 
     function saveStarred(starred) {
-      fetch("/api/starred", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([...starred]),
-      }).catch(() => {});   // silently ignore if server has no write endpoint
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...starred]));
+      } catch(e) {}
+    }
+
+    function exportStarred(starred) {
+      const blob = new Blob([JSON.stringify([...starred], null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "starred.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function ImportStarredButton({ onImport }) {
+      const handleChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const refs = JSON.parse(ev.target.result);
+            if (Array.isArray(refs)) onImport(new Set(refs));
+          } catch(e) {}
+        };
+        reader.readAsText(file);
+        e.target.value = "";
+      };
+      return (
+        <label style={{ cursor: "pointer", background: "#1a1a25", border: "1px solid #333", color: "#aaa", padding: "0.35rem 0.9rem", borderRadius: 20, fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+          Import
+          <input type="file" accept=".json,application/json" onChange={handleChange} style={{ display: "none" }} />
+        </label>
+      );
     }
 
     // ── APP ───────────────────────────────────────────────────────────────────────
@@ -124,7 +164,7 @@
       const [collections, setCollections] = useState([]);
       const [collectionId, setCollectionId] = useState(() => location.hash.slice(1) || null);
       const [filters, setFilters] = useState({ gmt: false, wr: "all", diameter: "all", starred: false });
-      const [starred, setStarred] = useState(new Set());
+      const [starred, setStarred] = useState(() => loadStarredFromStorage());
       const [modal, setModal] = useState(null);
       const [error, setError] = useState(null);
 
@@ -145,14 +185,6 @@
           .catch(err => setError(err.message || "Could not load collections"));
       }, []);
 
-      // Load starred refs from user/starred.json (missing file = empty set, not an error)
-      useEffect(() => {
-        fetch("user/starred.json")
-          .then(r => r.ok ? r.json() : [])
-          .then(refs => setStarred(new Set(refs)))
-          .catch(() => {});
-      }, []);
-
       const toggleStar = useCallback((wref) => {
         setStarred(prev => {
           const next = new Set(prev);
@@ -160,6 +192,11 @@
           saveStarred(next);
           return next;
         });
+      }, []);
+
+      const importStarred = useCallback((next) => {
+        setStarred(next);
+        saveStarred(next);
       }, []);
 
       const collection = collections.find(c => c.id === collectionId) ?? null;
@@ -206,6 +243,8 @@
           {/* Filters */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "1.2rem", justifyContent: "center", alignItems: "center", marginBottom: "1.8rem" }}>
             <Pill active={filters.starred} onClick={() => setFilters(f => ({ ...f, starred: !f.starred }))} activeColor="#f59e0b" activeTextColor="#000">★ Starred</Pill>
+            <button onClick={() => exportStarred(starred)} style={{ background: "#1a1a25", border: "1px solid #333", color: "#aaa", padding: "0.35rem 0.9rem", borderRadius: 20, cursor: "pointer", fontSize: "0.8rem", whiteSpace: "nowrap" }}>Export</button>
+            <ImportStarredButton onImport={importStarred} />
             <Pill active={filters.gmt} onClick={() => setFilters(f => ({ ...f, gmt: !f.gmt }))} activeColor="#6366f1" activeTextColor="#fff">GMT</Pill>
             <div style={{ display: "flex", gap: "0.4rem" }}>
               {WR_OPTIONS.map(o => (

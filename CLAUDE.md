@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A single-file app (`seiko_diver.html`) — an interactive catalog for Seiko Prospex automatic dive watches. No build tooling or package.json. Open directly in a browser.
+A single-file app (`index.html`) — a generic multi-collection watch catalog. No build tooling or package.json. Open directly in a browser. Project name: **watches-collections**.
 
 ## Architecture
 
