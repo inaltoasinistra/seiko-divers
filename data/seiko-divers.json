@@ -36,6 +36,17 @@
       "priceNote": "USA $725"
     },
     {
+      "cat": "1965",
+      "name": "1965 Heritage Save the Ocean",
+      "sub": "Cal. 6R35 · 70h · 40.5mm",
+      "refs": ["SPB297"],
+      "water_resistance": 200,
+      "diameter": 40.5,
+      "gmt": false,
+      "price": "~€1.150",
+      "priceNote": "USA $1.250 · Special Ed."
+    },
+    {
       "cat": "1968",
       "name": "1968 Heritage GMT",
       "sub": "Cal. 6R54 · 72h · 42mm · GMT",
@@ -67,6 +78,17 @@
       "gmt": true,
       "price": "~€1.400",
       "priceNote": "Limited Ed."
+    },
+    {
+      "cat": "1968",
+      "name": "1968 Heritage GMT",
+      "sub": "Cal. 6R54 · 72h · 42mm · GMT",
+      "refs": ["SPB519"],
+      "water_resistance": 300,
+      "diameter": 42,
+      "gmt": true,
+      "price": "€1.900",
+      "priceNote": ""
     },
     {
       "cat": "1968",

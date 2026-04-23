@@ -49,7 +49,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 class SilentHTTPServer(http.server.HTTPServer):
     def handle_error(self, request, client_address):
-        if sys.exc_info()[0] is BrokenPipeError:
+        if sys.exc_info()[0] in (BrokenPipeError, ConnectionResetError):
             return
         super().handle_error(request, client_address)
 
